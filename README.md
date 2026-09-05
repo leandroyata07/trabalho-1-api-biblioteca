@@ -19,36 +19,59 @@ O servidor sera iniciado em `http://localhost:3001`.
 ## Rotas principais
 
 | Metodo | Rota | Funcao |
-| --- | --- | --- |
-## Publicacao no GitHub
+# Trabalho 1 - API de Biblioteca
+
+API REST desenvolvida em Node.js e Express para gerenciar o dominio de uma biblioteca. O sistema permite cadastrar livros e estudantes, controlar emprestimos, impedir o emprestimo de livros indisponiveis e registrar devolucoes.
+
+## Instalacao
+
+Requisitos: Node.js 18 ou superior e npm.
 
 Na pasta do projeto, execute:
 
 ```bash
-git init
-git add .
-git commit -m "Entrega do Trabalho 1"
-git branch -M main
-git remote add origin https://github.com/SEU-USUARIO/trabalho-1-api-biblioteca.git
-git push -u origin main
+npm install
 ```
 
-Antes do `git push`, crie no GitHub um repositorio publico com o nome `trabalho-1-api-biblioteca` e substitua `SEU-USUARIO` pelo seu usuario.
-| GET | `/` | Apresenta a API |
-| GET | `/docs` | Documentacao resumida |
-| GET | `/livros` | Lista livros |
-| POST | `/livros` | Cadastra livro |
-| PUT | `/livros/:id` | Atualiza livro |
-| DELETE | `/livros/:id` | Remove livro |
-| GET | `/estudantes` | Lista estudantes |
-| POST | `/estudantes` | Cadastra estudante |
-| PUT | `/estudantes/:id` | Atualiza estudante |
-| DELETE | `/estudantes/:id` | Remove estudante |
-| GET | `/emprestimos` | Lista emprestimos |
-| POST | `/emprestimos` | Cria emprestimo |
-| PUT | `/emprestimos/:id/devolver` | Registra devolucao |
+## Execucao
 
-As listagens aceitam `?pagina=1&limite=10`. Exemplos de filtros: `/livros?titulo=dom` e `/livros?autor=machado`.
+Para iniciar o servidor:
+
+```bash
+npm start
+```
+
+A API sera disponibilizada em `http://localhost:3001`.
+
+Para validar a sintaxe do projeto:
+
+```bash
+npm test
+```
+
+## Endpoints
+
+| Metodo | Rota | Descricao |
+| --- | --- | --- |
+| GET | `/` | Apresenta a API e seus recursos |
+| GET | `/docs` | Exibe a documentacao resumida |
+| GET | `/openapi.json` | Retorna a especificacao OpenAPI |
+| GET | `/livros` | Lista livros, com filtros e paginacao |
+| GET | `/livros/:id` | Consulta um livro |
+| POST | `/livros` | Cadastra um livro |
+| PUT | `/livros/:id` | Atualiza um livro |
+| DELETE | `/livros/:id` | Remove um livro |
+| GET | `/estudantes` | Lista estudantes, com filtro e paginacao |
+| GET | `/estudantes/:id` | Consulta um estudante |
+| POST | `/estudantes` | Cadastra um estudante |
+| PUT | `/estudantes/:id` | Atualiza um estudante |
+| DELETE | `/estudantes/:id` | Remove um estudante |
+| GET | `/emprestimos` | Lista emprestimos |
+| GET | `/emprestimos/:id` | Consulta um emprestimo |
+| POST | `/emprestimos` | Cria um emprestimo |
+| PUT | `/emprestimos/:id/devolver` | Registra a devolucao de um livro |
+
+As listagens aceitam `?pagina=1&limite=10`. Os livros aceitam os filtros `?titulo=dom` e `?autor=machado`. Os estudantes aceitam o filtro `?nome=ana`.
 
 ## Exemplos de requisicao
 
