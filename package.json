@@ -1,0 +1,16 @@
+{
+  "name": "trabalho-1-api-biblioteca",
+  "version": "1.0.0",
+  "description": "API REST simples para gerenciamento de uma biblioteca",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node --check app.js"
+  },
+  "keywords": ["api", "rest", "express", "biblioteca"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
