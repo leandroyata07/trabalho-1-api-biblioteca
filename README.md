@@ -1,5 +1,11 @@
 # Trabalho 1 - API de Biblioteca
 
+**UFRB - Universidade Federal do Recôncavo da Bahia - Polo Feira de Santana - BA**  
+**Curso:** Licenciatura em Computação — 4ª Semestre  
+**Disciplina:** Desenvolvimento de Software II  
+**Docente:** Tassio Valle  
+**Equipe/Discente:** Leandro Oliveira Lima  
+
 API REST desenvolvida em Node.js com Express para controlar livros, estudantes e emprestimos.
 Na pasta `Trabalho 1`, execute:
 
