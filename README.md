@@ -387,17 +387,3 @@ Além da persistência, o projeto passou a possuir:
 - separação em camadas;
 - documentação OpenAPI.
 
-## 17. Observação sobre Git
-
-O Trabalho 2 deve ser entregue como evolução do repositório do Trabalho 1. Por isso, os arquivos desta etapa devem ser adicionados ao mesmo repositório, preservando o histórico anterior.
-
-Não devem ser versionados:
-
-```text
-.env
-node_modules/
-prisma/dev.db
-```
-
-O arquivo `.env.example` deve permanecer versionado para permitir a reprodução do ambiente.
-
