@@ -1,3 +1,9 @@
 node_modules/
 .env
 *.log
+coverage/
+src/generated/
+dev.db
+dev.db-journal
+dev.db-shm
+dev.db-wal

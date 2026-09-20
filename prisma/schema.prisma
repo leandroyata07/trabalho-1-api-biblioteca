@@ -1,0 +1,76 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension = "ts"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Estudante {
+  id          Int          @id @default(autoincrement())
+  nome        String
+  email       String       @unique
+  ativo       Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  emprestimos Emprestimo[]
+
+  @@index([nome])
+}
+
+model Livro {
+  id          Int           @id @default(autoincrement())
+  titulo      String
+  isbn        String        @unique
+  disponivel  Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  emprestimos Emprestimo[]
+  autores     LivroAutor[]
+
+  @@index([titulo])
+  @@index([disponivel])
+}
+
+model Autor {
+  id        Int         @id @default(autoincrement())
+  nome      String
+  email     String      @unique
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  livros    LivroAutor[]
+
+  @@index([nome])
+}
+
+model LivroAutor {
+  livroId   Int
+  autorId   Int
+  createdAt DateTime @default(now())
+  livro     Livro @relation(fields: [livroId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  autor     Autor @relation(fields: [autorId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@id([livroId, autorId])
+  @@index([autorId])
+}
+
+model Emprestimo {
+  id             Int       @id @default(autoincrement())
+  livroId        Int
+  estudanteId    Int
+  dataEmprestimo DateTime  @default(now())
+  dataDevolucao  DateTime?
+  devolvido      Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  livro          Livro     @relation(fields: [livroId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  estudante      Estudante @relation(fields: [estudanteId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@index([livroId])
+  @@index([estudanteId])
+  @@index([devolvido])
+}
