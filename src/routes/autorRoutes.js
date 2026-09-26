@@ -1,12 +1,12 @@
 import { Router } from "express";
-import {
-  listarAutores, obterAutor, criarAutor, atualizarAutor, excluirAutor
-} from "../controllers/autorController.js";
+import { autorController } from "../config/container.js";
 
 const router = Router();
-router.get("/", listarAutores);
-router.get("/:id", obterAutor);
-router.post("/", criarAutor);
-router.put("/:id", atualizarAutor);
-router.delete("/:id", excluirAutor);
+
+router.get("/", autorController.listar);
+router.get("/:id", autorController.obter);
+router.post("/", autorController.criar);
+router.put("/:id", autorController.atualizar);
+router.delete("/:id", autorController.excluir);
+
 export default router;

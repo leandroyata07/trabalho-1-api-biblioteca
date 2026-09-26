@@ -7,6 +7,7 @@ import emprestimosRoutes from "./routes/emprestimoRoutes.js";
 import { notFound } from "./middlewares/notFound.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { prisma } from "./lib/prisma.js";
+/* global process, console */
 
 const app = express();
 const port = Number(process.env.PORT) || 3001;

@@ -1,13 +1,14 @@
 {
-  "name": "trabalho-2-api-biblioteca",
-  "version": "2.0.0",
-  "description": "API REST de biblioteca evoluída com Prisma ORM e SQLite",
+  "name": "trabalho-3-api-biblioteca",
+  "version": "3.0.0",
+  "description": "API REST de biblioteca refatorada em camadas com Prisma ORM e SQLite",
   "type": "module",
   "main": "src/app.js",
   "scripts": {
     "start": "tsx src/app.js",
     "dev": "tsx watch src/app.js",
     "test": "node --check src/app.js",
+    "lint": "eslint src",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "prisma db seed"
@@ -20,10 +21,12 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^24.3.0",
+    "eslint": "^9.0.0",
     "prisma": "^7.10.0",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
-    "@types/node": "^24.3.0"
+    "typescript": "^5.9.2"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

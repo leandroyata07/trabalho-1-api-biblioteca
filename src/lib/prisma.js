@@ -1,3 +1,4 @@
+/* global process */
 import "dotenv/config";
 import { PrismaClient } from "../generated/prisma/client.ts";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";

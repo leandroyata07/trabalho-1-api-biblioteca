@@ -1,13 +1,12 @@
 import { Router } from "express";
-import {
-  listarEstudantes, obterEstudante, criarEstudante,
-  atualizarEstudante, excluirEstudante
-} from "../controllers/estudanteController.js";
+import { estudanteController } from "../config/container.js";
 
 const router = Router();
-router.get("/", listarEstudantes);
-router.get("/:id", obterEstudante);
-router.post("/", criarEstudante);
-router.put("/:id", atualizarEstudante);
-router.delete("/:id", excluirEstudante);
+
+router.get("/", estudanteController.listar);
+router.get("/:id", estudanteController.obter);
+router.post("/", estudanteController.criar);
+router.put("/:id", estudanteController.atualizar);
+router.delete("/:id", estudanteController.excluir);
+
 export default router;

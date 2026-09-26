@@ -1,0 +1,137 @@
+openapi: 3.0.0
+info:
+  title: API Biblioteca - Trabalho 2
+  version: 2.0.0
+  description: API REST de biblioteca com Prisma ORM e SQLite.
+servers:
+  - url: http://localhost:3001
+paths:
+  /livros:
+    get:
+      summary: Lista livros com filtros, paginação e ordenação
+      parameters:
+        - in: query
+          name: titulo
+          schema: { type: string }
+        - in: query
+          name: autor
+          schema: { type: string }
+        - in: query
+          name: pagina
+          schema: { type: integer, minimum: 1 }
+        - in: query
+          name: limite
+          schema: { type: integer, minimum: 1, maximum: 50 }
+        - in: query
+          name: ordenar
+          schema: { type: string }
+        - in: query
+          name: direcao
+          schema: { type: string, enum: [asc, desc] }
+      responses:
+        "200": { description: Lista paginada de livros }
+    post:
+      summary: Cadastra livro
+      responses:
+        "201": { description: Livro criado }
+        "409": { description: Violação de unicidade }
+  /livros/{id}:
+    get:
+      summary: Consulta livro com autores e empréstimos
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Livro encontrado }
+        "404": { description: Livro inexistente }
+    put:
+      summary: Atualiza livro
+      responses:
+        "200": { description: Livro atualizado }
+    delete:
+      summary: Remove livro respeitando integridade referencial
+      responses:
+        "200": { description: Livro removido }
+        "409": { description: Livro possui relacionamentos }
+  /estudantes:
+    get:
+      summary: Lista estudantes
+      responses:
+        "200": { description: Lista paginada }
+    post:
+      summary: Cadastra estudante
+      responses:
+        "201": { description: Estudante criado }
+        "409": { description: E-mail já cadastrado }
+  /estudantes/{id}:
+    get:
+      summary: Consulta estudante com empréstimos relacionados
+      responses:
+        "200": { description: Estudante encontrado }
+        "404": { description: Estudante inexistente }
+    put:
+      summary: Atualiza estudante
+      responses:
+        "200": { description: Estudante atualizado }
+    delete:
+      summary: Remove estudante
+      responses:
+        "200": { description: Estudante removido }
+        "409": { description: Existem registros relacionados }
+  /autores:
+    get:
+      summary: Lista autores
+      responses:
+        "200": { description: Lista paginada }
+    post:
+      summary: Cadastra autor
+      responses:
+        "201": { description: Autor criado }
+        "409": { description: E-mail já cadastrado }
+  /autores/{id}:
+    get:
+      summary: Consulta autor com livros relacionados
+      responses:
+        "200": { description: Autor encontrado }
+    put:
+      summary: Atualiza autor
+      responses:
+        "200": { description: Autor atualizado }
+    delete:
+      summary: Remove autor
+      responses:
+        "200": { description: Autor removido }
+        "409": { description: Existem livros relacionados }
+  /emprestimos:
+    get:
+      summary: Lista empréstimos com filtros, paginação e ordenação
+      responses:
+        "200": { description: Lista paginada }
+    post:
+      summary: Cria empréstimo usando transação
+      responses:
+        "201": { description: Empréstimo criado }
+        "404": { description: Livro ou estudante inexistente }
+        "409": { description: Livro indisponível }
+  /emprestimos/{id}:
+    get:
+      summary: Consulta empréstimo
+      responses:
+        "200": { description: Empréstimo encontrado }
+    put:
+      summary: Atualiza empréstimo
+      responses:
+        "200": { description: Empréstimo atualizado }
+    delete:
+      summary: Exclui empréstimo devolvido
+      responses:
+        "200": { description: Empréstimo removido }
+        "409": { description: Empréstimo ativo }
+  /emprestimos/{id}/devolver:
+    put:
+      summary: Registra devolução em transação
+      responses:
+        "200": { description: Devolução registrada }
+        "409": { description: Empréstimo já devolvido }

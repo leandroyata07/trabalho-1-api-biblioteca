@@ -1,14 +1,18 @@
 import { Router } from "express";
-import {
-  listarEmprestimos, obterEmprestimo, criarEmprestimo,
-  atualizarEmprestimo, excluirEmprestimo, devolverEmprestimo
-} from "../controllers/emprestimoController.js";
+import { emprestimoController } from "../config/container.js";
 
 const router = Router();
-router.get("/", listarEmprestimos);
-router.get("/:id", obterEmprestimo);
-router.post("/", criarEmprestimo);
-router.put("/:id", atualizarEmprestimo);
-router.delete("/:id", excluirEmprestimo);
-router.put("/:id/devolver", devolverEmprestimo);
+
+router.get("/", emprestimoController.listar);
+
+router.get("/:id", emprestimoController.obter);
+
+router.post("/", emprestimoController.criar);
+
+router.put("/:id", emprestimoController.atualizar);
+
+router.delete("/:id", emprestimoController.excluir);
+
+router.put("/:id/devolver", emprestimoController.devolver);
+
 export default router;
