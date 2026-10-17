@@ -1,32 +1,45 @@
 {
-  "name": "trabalho-3-api-biblioteca",
-  "version": "3.0.0",
-  "description": "API REST de biblioteca refatorada em camadas com Prisma ORM e SQLite",
+  "name": "trabalho-4-biblioteca-tempo-real",
+  "version": "4.0.0",
+  "private": true,
+  "description": "Sistema de Biblioteca em Tempo Real - API REST, Socket.IO, React, Prisma e PostgreSQL",
   "type": "module",
-  "main": "src/app.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "tsx src/app.js",
-    "dev": "tsx watch src/app.js",
-    "test": "node --check src/app.js",
-    "lint": "eslint src",
+    "start": "tsx src/server.js",
+    "dev": "tsx watch src/server.js",
+    "build": "vite build --config frontend/vite.config.js",
+    "test": "node --test",
+    "lint": "eslint src frontend/src",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "prisma db seed"
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:seed": "prisma db seed",
+    "dev:frontend": "vite --config frontend/vite.config.js"
   },
   "dependencies": {
-    "@prisma/adapter-better-sqlite3": "^7.10.0",
+    "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
-    "better-sqlite3": "^12.4.1",
     "dotenv": "^17.2.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "pg": "^8.16.3",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.8.1",
+    "prisma": "^7.10.0",
+    "tsx": "^4.20.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@types/node": "^24.3.0",
+    "@vitejs/plugin-react": "^5.0.4",
     "eslint": "^9.0.0",
-    "prisma": "^7.10.0",
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vite": "^7.1.7",
+    "globals": "^16.4.0"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

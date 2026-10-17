@@ -1,13 +1,13 @@
 generator client {
-  provider            = "prisma-client"
-  output              = "../src/generated/prisma"
-  moduleFormat        = "esm"
-  generatedFileExtension = "ts"
-  importFileExtension = "ts"
+  provider                = "prisma-client"
+  output                  = "../src/generated/prisma"
+  moduleFormat            = "esm"
+  generatedFileExtension  = "ts"
+  importFileExtension     = "ts"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 model Estudante {
@@ -69,8 +69,25 @@ model Emprestimo {
   updatedAt      DateTime  @updatedAt
   livro          Livro     @relation(fields: [livroId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   estudante      Estudante @relation(fields: [estudanteId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  notificacoes   Notificacao[]
 
   @@index([livroId])
   @@index([estudanteId])
   @@index([devolvido])
+}
+
+model Notificacao {
+  id           Int        @id @default(autoincrement())
+  tipo         String
+  titulo       String
+  mensagem     String
+  lida         Boolean    @default(false)
+  emprestimoId Int?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  emprestimo   Emprestimo? @relation(fields: [emprestimoId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@index([lida])
+  @@index([tipo])
+  @@index([createdAt])
 }

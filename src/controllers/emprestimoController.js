@@ -34,6 +34,16 @@ export function criarEmprestimoController(emprestimoService) {
           where.estudanteId = parseId(req.query.estudanteId) || -1;
         }
 
+        if (req.query.q !== undefined) {
+          const q = String(req.query.q).trim().slice(0, 100);
+          if (q) {
+            where.OR = [
+              { livro: { is: { titulo: { contains: q, mode: "insensitive" } } } },
+              { estudante: { is: { nome: { contains: q, mode: "insensitive" } } } },
+            ];
+          }
+        }
+
         const { dados, total } = await emprestimoService.listar({
           skip,
           take,

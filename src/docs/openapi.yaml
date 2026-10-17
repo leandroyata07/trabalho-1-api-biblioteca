@@ -1,137 +1,118 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
-  title: API Biblioteca - Trabalho 2
-  version: 2.0.0
-  description: API REST de biblioteca com Prisma ORM e SQLite.
+  title: Biblioteca em Tempo Real API
+  version: 4.0.0
+  description: API REST de biblioteca com Prisma, notificações persistidas e eventos Socket.IO.
 servers:
   - url: http://localhost:3001
+    description: Execução local/Docker Compose
 paths:
+  /health:
+    get:
+      summary: Verifica aplicação e conexão com o banco
+      responses:
+        '200': { description: Aplicação e banco disponíveis }
+        '503': { description: Banco indisponível }
   /livros:
     get:
-      summary: Lista livros com filtros, paginação e ordenação
+      summary: Lista livros com paginação e filtros
       parameters:
-        - in: query
-          name: titulo
-          schema: { type: string }
-        - in: query
-          name: autor
-          schema: { type: string }
-        - in: query
-          name: pagina
-          schema: { type: integer, minimum: 1 }
-        - in: query
-          name: limite
-          schema: { type: integer, minimum: 1, maximum: 50 }
-        - in: query
-          name: ordenar
-          schema: { type: string }
-        - in: query
-          name: direcao
-          schema: { type: string, enum: [asc, desc] }
-      responses:
-        "200": { description: Lista paginada de livros }
+        - { in: query, name: titulo, schema: { type: string } }
+        - { in: query, name: pagina, schema: { type: integer, minimum: 1 } }
+        - { in: query, name: limite, schema: { type: integer, minimum: 1, maximum: 50 } }
+      responses: { '200': { description: Lista paginada de livros } }
     post:
       summary: Cadastra livro
-      responses:
-        "201": { description: Livro criado }
-        "409": { description: Violação de unicidade }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, required: [titulo, isbn], properties: { titulo: { type: string }, isbn: { type: string } } }
+      responses: { '201': { description: Livro criado }, '400': { description: Dados inválidos }, '409': { description: ISBN duplicado } }
   /livros/{id}:
-    get:
-      summary: Consulta livro com autores e empréstimos
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        "200": { description: Livro encontrado }
-        "404": { description: Livro inexistente }
-    put:
-      summary: Atualiza livro
-      responses:
-        "200": { description: Livro atualizado }
-    delete:
-      summary: Remove livro respeitando integridade referencial
-      responses:
-        "200": { description: Livro removido }
-        "409": { description: Livro possui relacionamentos }
+    parameters: [{ in: path, name: id, required: true, schema: { type: integer } }]
+    get: { summary: Consulta livro, responses: { '200': { description: Livro encontrado }, '404': { description: Não encontrado } } }
+    put: { summary: Atualiza livro, responses: { '200': { description: Livro atualizado }, '400': { description: Dados inválidos } } }
+    delete: { summary: Remove livro, responses: { '200': { description: Livro removido }, '409': { description: Livro relacionado a outros registros } } }
   /estudantes:
-    get:
-      summary: Lista estudantes
-      responses:
-        "200": { description: Lista paginada }
+    get: { summary: Lista estudantes com paginação e filtros, responses: { '200': { description: Lista paginada } } }
     post:
       summary: Cadastra estudante
-      responses:
-        "201": { description: Estudante criado }
-        "409": { description: E-mail já cadastrado }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, required: [nome, email], properties: { nome: { type: string }, email: { type: string, format: email } } }
+      responses: { '201': { description: Estudante criado }, '400': { description: Dados inválidos }, '409': { description: E-mail duplicado } }
   /estudantes/{id}:
-    get:
-      summary: Consulta estudante com empréstimos relacionados
-      responses:
-        "200": { description: Estudante encontrado }
-        "404": { description: Estudante inexistente }
-    put:
-      summary: Atualiza estudante
-      responses:
-        "200": { description: Estudante atualizado }
-    delete:
-      summary: Remove estudante
-      responses:
-        "200": { description: Estudante removido }
-        "409": { description: Existem registros relacionados }
+    parameters: [{ in: path, name: id, required: true, schema: { type: integer } }]
+    get: { summary: Consulta estudante, responses: { '200': { description: Estudante encontrado }, '404': { description: Não encontrado } } }
+    put: { summary: Atualiza estudante, responses: { '200': { description: Estudante atualizado } } }
+    delete: { summary: Remove estudante, responses: { '200': { description: Estudante removido }, '409': { description: Estudante com registros relacionados } } }
   /autores:
-    get:
-      summary: Lista autores
-      responses:
-        "200": { description: Lista paginada }
+    get: { summary: Lista autores com paginação e filtros, responses: { '200': { description: Lista paginada } } }
     post:
       summary: Cadastra autor
-      responses:
-        "201": { description: Autor criado }
-        "409": { description: E-mail já cadastrado }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, required: [nome, email], properties: { nome: { type: string }, email: { type: string, format: email } } }
+      responses: { '201': { description: Autor criado }, '400': { description: Dados inválidos }, '409': { description: E-mail duplicado } }
   /autores/{id}:
-    get:
-      summary: Consulta autor com livros relacionados
-      responses:
-        "200": { description: Autor encontrado }
-    put:
-      summary: Atualiza autor
-      responses:
-        "200": { description: Autor atualizado }
-    delete:
-      summary: Remove autor
-      responses:
-        "200": { description: Autor removido }
-        "409": { description: Existem livros relacionados }
+    parameters: [{ in: path, name: id, required: true, schema: { type: integer } }]
+    get: { summary: Consulta autor, responses: { '200': { description: Autor encontrado }, '404': { description: Não encontrado } } }
+    put: { summary: Atualiza autor, responses: { '200': { description: Autor atualizado } } }
+    delete: { summary: Remove autor, responses: { '200': { description: Autor removido }, '409': { description: Autor com livros relacionados } } }
   /emprestimos:
     get:
-      summary: Lista empréstimos com filtros, paginação e ordenação
-      responses:
-        "200": { description: Lista paginada }
+      summary: Lista empréstimos com filtros, busca e paginação
+      parameters:
+        - { in: query, name: devolvido, schema: { type: boolean } }
+        - { in: query, name: livroId, schema: { type: integer } }
+        - { in: query, name: estudanteId, schema: { type: integer } }
+        - { in: query, name: q, schema: { type: string }, description: Busca por título do livro ou nome do estudante }
+        - { in: query, name: pagina, schema: { type: integer, minimum: 1 } }
+        - { in: query, name: limite, schema: { type: integer, minimum: 1, maximum: 50 } }
+      responses: { '200': { description: Lista paginada } }
     post:
-      summary: Cria empréstimo usando transação
-      responses:
-        "201": { description: Empréstimo criado }
-        "404": { description: Livro ou estudante inexistente }
-        "409": { description: Livro indisponível }
+      summary: Registra empréstimo em transação e emite eventos em tempo real
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, required: [livroId, estudanteId], properties: { livroId: { type: integer }, estudanteId: { type: integer } } }
+      responses: { '201': { description: Empréstimo criado }, '404': { description: Livro/estudante não encontrado }, '409': { description: Livro indisponível } }
   /emprestimos/{id}:
-    get:
-      summary: Consulta empréstimo
-      responses:
-        "200": { description: Empréstimo encontrado }
-    put:
-      summary: Atualiza empréstimo
-      responses:
-        "200": { description: Empréstimo atualizado }
-    delete:
-      summary: Exclui empréstimo devolvido
-      responses:
-        "200": { description: Empréstimo removido }
-        "409": { description: Empréstimo ativo }
+    parameters: [{ in: path, name: id, required: true, schema: { type: integer } }]
+    get: { summary: Consulta empréstimo, responses: { '200': { description: Empréstimo encontrado }, '404': { description: Não encontrado } } }
+    put: { summary: Atualiza empréstimo, responses: { '200': { description: Empréstimo atualizado } } }
+    delete: { summary: Exclui empréstimo devolvido, responses: { '200': { description: Empréstimo removido }, '409': { description: Empréstimo ainda ativo } } }
   /emprestimos/{id}/devolver:
     put:
-      summary: Registra devolução em transação
-      responses:
-        "200": { description: Devolução registrada }
-        "409": { description: Empréstimo já devolvido }
+      summary: Registra devolução em transação e notifica clientes conectados
+      parameters: [{ in: path, name: id, required: true, schema: { type: integer } }]
+      responses: { '200': { description: Devolução registrada }, '404': { description: Empréstimo não encontrado }, '409': { description: Empréstimo já devolvido } }
+  /notificacoes:
+    get:
+      summary: Central de notificações persistidas
+      parameters:
+        - { in: query, name: lida, schema: { type: boolean } }
+        - { in: query, name: tipo, schema: { type: string } }
+        - { in: query, name: pagina, schema: { type: integer, minimum: 1 } }
+        - { in: query, name: limite, schema: { type: integer, minimum: 1, maximum: 50 } }
+      responses: { '200': { description: Notificações paginadas } }
+  /notificacoes/nao-lidas/total:
+    get: { summary: Conta notificações não lidas, responses: { '200': { description: Quantidade não lida } } }
+  /notificacoes/lidas:
+    put: { summary: Marca todas as notificações como lidas, responses: { '200': { description: Operação concluída } } }
+  /notificacoes/{id}/lida:
+    put:
+      summary: Marca uma notificação como lida
+      parameters: [{ in: path, name: id, required: true, schema: { type: integer } }]
+      responses: { '200': { description: Notificação atualizada }, '404': { description: Notificação não encontrada } }
+  /notificacoes/{id}:
+    delete:
+      summary: Exclui uma notificação
+      parameters: [{ in: path, name: id, required: true, schema: { type: integer } }]
+      responses: { '200': { description: Notificação removida }, '404': { description: Não encontrada } }

@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* global console */
 
 export function errorHandler(error, req, res, next) {
   console.error(`[${req.method} ${req.originalUrl}]`, error?.message || error);

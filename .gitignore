@@ -7,3 +7,16 @@ dev.db
 dev.db-journal
 dev.db-shm
 dev.db-wal
+
+# Segredos e configurações locais
+.env.*
+!.env.example
+
+# Arquivos gerados pelo build
+dist/
+frontend/dist/
+src/generated/
+
+# Arquivos temporários do sistema
+.DS_Store
+*.log
